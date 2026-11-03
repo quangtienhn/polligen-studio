@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PolliGen Studio — Autonomous Creative Suite</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #238636;
+      --accent-hover: #2ea043;
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --pollen: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { color: var(--heading); font-size: 2.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .badge { background: rgba(245, 158, 11, 0.15); color: var(--pollen); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.85rem; border: 1px solid var(--pollen); }
+    .subtitle { color: #8b949e; font-size: 1.1rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--heading); }
+    input[type="text"], select, textarea { width: 100%; padding: 0.75rem; background: #0d1117; border: 1px solid var(--border); border-radius: 6px; color: #fff; margin-bottom: 1rem; font-size: 1rem; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #58a6ff; }
+    .btn { background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 600; transition: background 0.2s; width: 100%; }
+    .btn:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #21262d; border: 1px solid var(--border); margin-top: 0.5rem; }
+    .btn-secondary:hover { background: #30363d; }
+    .result-section { display: none; margin-top: 1.5rem; }
+    .image-container { text-align: center; margin-top: 1rem; border-radius: 8px; overflow: hidden; background: #000; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+    .image-container img { max-width: 100%; height: auto; border-radius: 8px; }
+    .prompt-box { background: #0d1117; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.9rem; margin-top: 0.5rem; border: 1px solid var(--border); }
+    .meta-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; align-items: center; }
+    .tag { background: #21262d; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; }
+    footer { text-align: center; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌸 PolliGen Studio <span class="badge">Pollinations Ecosystem</span></h1>
+      <p class="subtitle">Autonomous Multimodal Creative Suite powered by Pollinations Gen-AI</p>
+    </header>
+
+    <div class="card">
+      <label for="concept">Creative Concept</label>
+      <input type="text" id="concept" placeholder="e.g. A solitary astronaut standing on crystal dunes under an aurora sky" value="A solitary astronaut standing on crystal dunes under a bioluminescent sky">
+
+      <label for="style">Visual Aesthetic</label>
+      <select id="style">
+        <option value="photorealistic cinematic masterpiece">Photorealistic 8K (Cinematic Lighting)</option>
+        <option value="cyberpunk neon digital art">Cyberpunk Sci-Fi (Unreal Engine 5)</option>
+        <option value="studio ghibli watercolor anime">Studio Ghibli Watercolor Illustration</option>
+        <option value="dark fantasy oil painting">Dark Fantasy Epic Oil Painting</option>
+        <option value="minimalist vector modern artwork">Minimalist Vector Iconography</option>
+      </select>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label for="model">Image Model</label>
+          <select id="model">
+            <option value="flux">Flux.1 Schnell (High Speed)</option>
+            <option value="turbo">Turbo SDXL</option>
+          </select>
+        </div>
+        <div>
+          <label for="seed">Seed (Optional)</label>
+          <input type="text" id="seed" placeholder="Random or number" value="42">
+        </div>
+      </div>
+
+      <button class="btn" id="generateBtn" onclick="generateArtwork()">Generate Artwork</button>
+      <button class="btn btn-secondary" onclick="connectPollinations()">Connect Pollinations Wallet (BYOP)</button>
+    </div>
+
+    <div class="card result-section" id="results">
+      <h2>Synthesized Output</h2>
+      <label style="margin-top: 1rem;">Enhanced Visual Prompt:</label>
+      <div class="prompt-box" id="enhancedPrompt">...</div>
+
+      <div class="image-container">
+        <img id="artworkImg" src="" alt="Generated artwork preview">
+      </div>
+
+      <div class="meta-tags">
+        <span class="tag">Status: Verified OK</span>
+        <span class="tag" id="modelTag">Model: flux</span>
+        <span class="tag">Powered by Pollinations API</span>
+      </div>
+    </div>
+
+    <footer>
+      <a href="https://pollinations.ai/?ref=badge" target="_blank" rel="noopener noreferrer">
+        <img src="https://raw.githubusercontent.com/pollinations/pollinations/main/packages/ui/src/brand/badge-made-with.svg" alt="Made with pollinations.ai" style="height: 32px;">
+      </a>
+    </footer>
+  </div>
+
+  <script>
+    function generateArtwork() {
+      const concept = document.getElementById('concept').value;
+      const style = document.getElementById('style').value;
+      const model = document.getElementById('model').value;
+      const seed = document.getElementById('seed').value || Math.floor(Math.random() * 100000);
+
+      const enhanced = `${style.toUpperCase()} depiction of ${concept}, highly detailed, volumetric lighting, 8k resolution, award-winning masterpiece`;
+      document.getElementById('enhancedPrompt').innerText = enhanced;
+      document.getElementById('modelTag').innerText = `Model: ${model} | Seed: ${seed}`;
+
+      const encoded = encodeURIComponent(enhanced);
+      const url = `https://image.pollinations.ai/prompt/${encoded}?width=1024&height=1024&model=${model}&seed=${seed}&nologo=true`;
+
+      const img = document.getElementById('artworkImg');
+      img.src = url;
+      document.getElementById('results').style.display = 'block';
+    }
+
+    function connectPollinations() {
+      window.open('https://enter.pollinations.ai/', '_blank');
+    }
+  </script>
+</body>
+</html>

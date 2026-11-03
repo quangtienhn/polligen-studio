@@ -1,0 +1,21 @@
+{
+  "name": "PolliGen Studio",
+  "description": "Creative image studio and visual prompt enhancer powered by Pollinations Gen-AI. Turn concepts into high-fidelity artworks with multi-style aesthetics and BYOP support.",
+  "url": "http://localhost:3000",
+  "githubRepositoryUrl": null,
+  "author": "Community Contributor",
+  "category": "Creative & Art",
+  "platform": ["web", "cli"],
+  "tags": [
+    "multimodal",
+    "prompt-engineering",
+    "image-generation",
+    "flux",
+    "creative-assistant"
+  ],
+  "icon": "https://pollinations.ai/favicon.ico",
+  "screenshotUrl": null,
+  "featured": false,
+  "license": "MIT",
+  "quest": null
+}
